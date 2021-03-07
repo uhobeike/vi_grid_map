@@ -1,5 +1,5 @@
-#ifndef RVIZ_GRID_CELLS_DISPLAY_H
-#define RVIZ_GRID_CELLS_DISPLAY_H
+#ifndef RVIZ_VIGRID_CELLS_DISPLAY_H
+#define RVIZ_VIGRID_CELLS_DISPLAY_H
 
 #include "rviz/display.h"
 
@@ -72,4 +72,4 @@ private:
 
 } // namespace rviz
 
-#endif /* RVIZ_GRID_CELLS_DISPLAY_H */
+#endif /* RVIZ_VIGRID_CELLS_DISPLAY_H */
