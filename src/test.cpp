@@ -22,7 +22,7 @@ int main(int argc, char** argv){
 
   nav_msgs::GridCells msg;
   msg.cells.resize(int(width * length* pow(1/resolution,2)));
-  msg.header.frame_id = "map";
+  msg.header.frame_id = "vi_map";
   msg.cell_width = resolution;
   msg.cell_height = resolution;
 
