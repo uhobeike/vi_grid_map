@@ -20,8 +20,6 @@ namespace rviz
 {
 ViGridCellsDisplay::ViGridCellsDisplay() : Display(), messages_received_(0), last_frame_count_(uint64_t(-1))
 {
-  color_property_ = new ColorProperty("Color", QColor(255, 255, 0), "Color of the grid cells.", this);
-
   alpha_property_ = new FloatProperty("Alpha", 1.0, "Amount of transparency to apply to the cells.",
                                       this, SLOT(updateAlpha()));
   alpha_property_->setMin(0);
@@ -62,7 +60,6 @@ void ViGridCellsDisplay::onInitialize()
 
   tf_filter_->connectInput(sub_);
   tf_filter_->registerCallback(boost::bind(&ViGridCellsDisplay::incomingMessage, this, _1));
-// TODO(wjwwood): remove this and use tf2 interface instead
 #ifndef _WIN32
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
@@ -158,6 +155,41 @@ bool validateFloats(const vi_grid_map_msgs::ViGridCells& msg)
   return valid;
 }
 
+float colorvalue_changer(float i, float i_min, float i_max) {
+  i = std::min(i, i_max);
+  i = std::max(i, i_min);
+  i = (i - i_min) / (i_max - i_min);
+
+  return i;
+}
+
+Ogre::ColourValue getRainbowColor(float value, Ogre::ColourValue& color)
+{
+
+  value = std::min(value, 1.0f);
+  value = std::max(value, 0.0f);
+
+  float h = value * 5.0f + 1.0f;
+  int i = floor(h);
+  float f = h - i;
+  if (!(i & 1))
+    f = 1 - f;
+  float n = 1 - f;
+
+  if (i <= 1)
+    color[0] = n, color[1] = 0, color[2] = 1;
+  else if (i == 2)
+    color[0] = 0, color[1] = n, color[2] = 1;
+  else if (i == 3)
+    color[0] = 0, color[1] = 1, color[2] = n;
+  else if (i == 4)
+    color[0] = n, color[1] = 1, color[2] = 0;
+  else if (i >= 5)
+    color[0] = 1, color[1] = n, color[2] = 0;
+  
+  return color;
+}
+
 void ViGridCellsDisplay::incomingMessage(const vi_grid_map_msgs::ViGridCells::ConstPtr& msg)
 {
   if (!msg)
@@ -206,7 +238,7 @@ void ViGridCellsDisplay::incomingMessage(const vi_grid_map_msgs::ViGridCells::Co
 
   cloud_->setDimensions(msg->cell_width, msg->cell_height, 0.0);
 
-  Ogre::ColourValue color_int = qtToOgre(color_property_->getColor());
+  Ogre::ColourValue vi_gird_color;
   uint32_t num_points = msg->cells.size();
 
   typedef std::vector<PointCloud::Point> V_Point;
@@ -218,7 +250,8 @@ void ViGridCellsDisplay::incomingMessage(const vi_grid_map_msgs::ViGridCells::Co
     current_point.position.x = msg->cells[i].x;
     current_point.position.y = msg->cells[i].y;
     current_point.position.z = msg->cells[i].z;
-    current_point.color = color_int;
+    float color = colorvalue_changer(i, 0, 102400);
+    current_point.color = getRainbowColor(color, vi_gird_color);
   }
 
   cloud_->clear();

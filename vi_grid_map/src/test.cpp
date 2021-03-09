@@ -46,12 +46,14 @@ int main(int argc, char** argv){
         point.y = float(y)*resolution;
         point.z = 0;
       }
-      msg.header.stamp = ros::Time::now();
-      pub.publish(msg);
-
-      ros::Duration duration(0.01);
-      duration.sleep();
     }
+    msg.header.stamp = ros::Time::now();
+    pub.publish(msg);
+
+    // cout << msg.cells.size() << "\n";
+
+    ros::Duration duration(1);
+    duration.sleep();
     // ros::spinOnce();
     // loop_rate.sleep();
   }
