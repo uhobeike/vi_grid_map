@@ -3,7 +3,7 @@
     <description>
       Displays data from a vi_grid_map::ViGridCells message as billboards.
     </description>
-    <message_type>vi_grid_map/ViGridCells</message_type>
+    <message_type>vi_grid_map_msgs/ViGridCells</message_type>
   </class>
 
 </library>

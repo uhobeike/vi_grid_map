@@ -1,5 +1,5 @@
 #include "ros/ros.h"
-#include "nav_msgs/GridCells.h"
+#include "vi_grid_map_msgs/ViGridCells.h"
 #include "math.h"
 
 using namespace::std;
@@ -9,7 +9,7 @@ int main(int argc, char** argv){
 
   ros::NodeHandle nh;
 
-  ros::Publisher pub = nh.advertise<nav_msgs::GridCells>("grid_cells", 100);
+  ros::Publisher pub = nh.advertise<vi_grid_map_msgs::ViGridCells>("grid_cells", 100);
   // ros::Rate loop_rate(0.1);
 
   float width = 19.2;
@@ -20,7 +20,7 @@ int main(int argc, char** argv){
   int loop_width = width * resolution_Reciprocal;
   int loop_length = length * resolution_Reciprocal;
 
-  nav_msgs::GridCells msg;
+  vi_grid_map_msgs::ViGridCells msg;
   msg.cells.resize(int(width * length* pow(1/resolution,2)));
   msg.header.frame_id = "vi_map";
   msg.cell_width = resolution;

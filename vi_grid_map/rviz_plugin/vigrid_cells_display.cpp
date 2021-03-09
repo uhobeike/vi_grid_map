@@ -20,7 +20,7 @@ namespace rviz
 {
 ViGridCellsDisplay::ViGridCellsDisplay() : Display(), messages_received_(0), last_frame_count_(uint64_t(-1))
 {
-  color_property_ = new ColorProperty("Color", QColor(25, 255, 0), "Color of the grid cells.", this);
+  color_property_ = new ColorProperty("Color", QColor(255, 255, 0), "Color of the grid cells.", this);
 
   alpha_property_ = new FloatProperty("Alpha", 1.0, "Amount of transparency to apply to the cells.",
                                       this, SLOT(updateAlpha()));
@@ -29,8 +29,8 @@ ViGridCellsDisplay::ViGridCellsDisplay() : Display(), messages_received_(0), las
 
   topic_property_ =
       new RosTopicProperty("Topic", "",
-                           QString::fromStdString(ros::message_traits::datatype<vi_grid_map::ViGridCells>()),
-                           "vi_grid_map::ViGridCells topic to subscribe to.", this, SLOT(updateTopic()));
+                           QString::fromStdString(ros::message_traits::datatype<vi_grid_map_msgs::ViGridCells>()),
+                           "vi_grid_map_msgs::ViGridCells topic to subscribe to.", this, SLOT(updateTopic()));
 }
 
 void ViGridCellsDisplay::onInitialize()
@@ -48,7 +48,7 @@ void ViGridCellsDisplay::onInitialize()
 #endif
 
   tf_filter_ =
-      new tf::MessageFilter<vi_grid_map::ViGridCells>(*tf_client, fixed_frame_.toStdString(), 10, update_nh_);
+      new tf::MessageFilter<vi_grid_map_msgs::ViGridCells>(*tf_client, fixed_frame_.toStdString(), 10, update_nh_);
   static int count = 0;
   std::stringstream ss;
   ss << "PolyLine" << count++;
@@ -149,7 +149,7 @@ void ViGridCellsDisplay::fixedFrameChanged()
   tf_filter_->setTargetFrame(fixed_frame_.toStdString());
 }
 
-bool validateFloats(const vi_grid_map::ViGridCells& msg)
+bool validateFloats(const vi_grid_map_msgs::ViGridCells& msg)
 {
   bool valid = true;
   valid = valid && validateFloats(msg.cell_width);
@@ -158,7 +158,7 @@ bool validateFloats(const vi_grid_map::ViGridCells& msg)
   return valid;
 }
 
-void ViGridCellsDisplay::incomingMessage(const vi_grid_map::ViGridCells::ConstPtr& msg)
+void ViGridCellsDisplay::incomingMessage(const vi_grid_map_msgs::ViGridCells::ConstPtr& msg)
 {
   if (!msg)
   {

@@ -3,7 +3,7 @@
 
 #include "rviz/display.h"
 
-#include <vi_grid_map/ViGridCells.h>
+#include <vi_grid_map_msgs/ViGridCells.h>
 #include <nav_msgs/MapMetaData.h>
 
 #ifndef Q_MOC_RUN
@@ -27,7 +27,7 @@ class RosTopicProperty;
 
 /**
  * \class ViGridCellsDisplay
- * \brief Displays a vi_grid_map::ViGridCells message
+ * \brief Displays a vi_grid_map_msgs::ViGridCells message
  */
 class ViGridCellsDisplay : public Display
 {
@@ -55,12 +55,12 @@ private:
   void subscribe();
   void unsubscribe();
   void clear();
-  void incomingMessage(const vi_grid_map::ViGridCells::ConstPtr& msg);
+  void incomingMessage(const vi_grid_map_msgs::ViGridCells::ConstPtr& msg);
 
   PointCloud* cloud_;
 
-  message_filters::Subscriber<vi_grid_map::ViGridCells> sub_;
-  tf::MessageFilter<vi_grid_map::ViGridCells>* tf_filter_;
+  message_filters::Subscriber<vi_grid_map_msgs::ViGridCells> sub_;
+  tf::MessageFilter<vi_grid_map_msgs::ViGridCells>* tf_filter_;
 
   ColorProperty* color_property_;
   RosTopicProperty* topic_property_;
