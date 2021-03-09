@@ -29,8 +29,8 @@ ViGridCellsDisplay::ViGridCellsDisplay() : Display(), messages_received_(0), las
 
   topic_property_ =
       new RosTopicProperty("Topic", "",
-                           QString::fromStdString(ros::message_traits::datatype<nav_msgs::GridCells>()),
-                           "nav_msgs::GridCells topic to subscribe to.", this, SLOT(updateTopic()));
+                           QString::fromStdString(ros::message_traits::datatype<vi_grid_map::ViGridCells>()),
+                           "vi_grid_map::ViGridCells topic to subscribe to.", this, SLOT(updateTopic()));
 }
 
 void ViGridCellsDisplay::onInitialize()
@@ -48,7 +48,7 @@ void ViGridCellsDisplay::onInitialize()
 #endif
 
   tf_filter_ =
-      new tf::MessageFilter<nav_msgs::GridCells>(*tf_client, fixed_frame_.toStdString(), 10, update_nh_);
+      new tf::MessageFilter<vi_grid_map::ViGridCells>(*tf_client, fixed_frame_.toStdString(), 10, update_nh_);
   static int count = 0;
   std::stringstream ss;
   ss << "PolyLine" << count++;
@@ -149,7 +149,7 @@ void ViGridCellsDisplay::fixedFrameChanged()
   tf_filter_->setTargetFrame(fixed_frame_.toStdString());
 }
 
-bool validateFloats(const nav_msgs::GridCells& msg)
+bool validateFloats(const vi_grid_map::ViGridCells& msg)
 {
   bool valid = true;
   valid = valid && validateFloats(msg.cell_width);
@@ -158,7 +158,7 @@ bool validateFloats(const nav_msgs::GridCells& msg)
   return valid;
 }
 
-void ViGridCellsDisplay::incomingMessage(const nav_msgs::GridCells::ConstPtr& msg)
+void ViGridCellsDisplay::incomingMessage(const vi_grid_map::ViGridCells::ConstPtr& msg)
 {
   if (!msg)
   {

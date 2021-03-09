@@ -60,9 +60,9 @@ Visualization Manager:
       Name: map
       Topic: /map
     - Alpha: 0.2
-      Class: rviz/GridCells
+      Class: rviz/ViGridCells
       Enabled: true
-      Name: GridCells
+      Name: ViGridCells
       Topic: /grid_cells
   Enabled: true
   Global Options:
