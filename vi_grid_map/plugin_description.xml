@@ -1,0 +1,9 @@
+<library path="lib/libvi_grid_map">
+  <class name="rviz/ViGridCells" type="rviz::ViGridCellsDisplay" base_class_type="rviz::Display">
+    <description>
+      Displays data from a vi_grid_map::ViGridCells message as billboards.
+    </description>
+    <message_type>vi_grid_map/ViGridCells</message_type>
+  </class>
+
+</library>
