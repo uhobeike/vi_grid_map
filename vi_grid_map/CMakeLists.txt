@@ -8,9 +8,9 @@ set(CMAKE_CXX_FLAGS "-std=c++14 -O3 ${CMAKE_CXX_FLAGS}")
 find_package(catkin REQUIRED COMPONENTS
   geometry_msgs
   nav_msgs
-  message_generation
   roscpp
   std_msgs
+  vi_grid_map_msgs
   pluginlib
   rviz
 )
@@ -38,11 +38,7 @@ set(SOURCE_FILES
 ## Declare ROS messages, services and actions ##
 ################################################
 ## Generate messages in the 'msg' folder
-add_message_files(
-  DIRECTORY msg
-  FILES
-  ViGridCells.msg
-)
+
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
@@ -57,8 +53,8 @@ catkin_package(
     rviz
   CATKIN_DEPENDS 
     geometry_msgs 
-    message_runtime 
     std_msgs
+    vi_grid_map_msgs
     pluginlib
 )
 
