@@ -152,6 +152,7 @@ bool validateFloats(const vi_grid_map_msgs::ViGridCells& msg)
   valid = valid && validateFloats(msg.cell_width);
   valid = valid && validateFloats(msg.cell_height);
   valid = valid && validateFloats(msg.cells);
+  valid = valid && validateFloats(msg.cell_value);
   return valid;
 }
 
@@ -250,7 +251,7 @@ void ViGridCellsDisplay::incomingMessage(const vi_grid_map_msgs::ViGridCells::Co
     current_point.position.x = msg->cells[i].x;
     current_point.position.y = msg->cells[i].y;
     current_point.position.z = msg->cells[i].z;
-    float color = colorvalue_changer(i, 0, 102400);
+    float color = colorvalue_changer(msg->cell_value[i], 0, msg->cell_value[2]);
     current_point.color = getRainbowColor(color, vi_gird_color);
   }
 
