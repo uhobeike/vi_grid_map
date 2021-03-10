@@ -3,4 +3,4 @@ Header header
 float32 cell_width
 float32 cell_height
 geometry_msgs/Point[] cells
-float32 cell_value
+float32[] cell_value
