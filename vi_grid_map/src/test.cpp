@@ -1,4 +1,5 @@
-#include "ros/ros.h"
+#include <ros/ros.h>
+
 #include "vi_grid_map_msgs/ViGridCells.h"
 #include "math.h"
 
@@ -21,7 +22,7 @@ int main(int argc, char** argv){
   int loop_length = length * resolution_Reciprocal;
 
   vi_grid_map_msgs::ViGridCells msg;
-  msg.cells.resize(int(width * length* pow(1/resolution,2)));
+  msg.cells.resize(int(width * length* pow(1/resolution, 2)));
   msg.header.frame_id = "vi_map";
   msg.cell_width = resolution;
   msg.cell_height = resolution;
