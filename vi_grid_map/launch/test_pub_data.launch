@@ -1,0 +1,8 @@
+<launch>
+  <!-- Arguments -->
+  <arg name="pgm_data_file" default="$(find vi_grid_map)/config/data/value_t=0.csv"/>
+
+  <!-- node launch -->     
+  <node pkg="vi_grid_map" name="vi_grid_map_pub_data_node" type="vi_grid_map_pub_data_node" args="$(arg pgm_data_file)" output="screen"/>
+
+</launch>

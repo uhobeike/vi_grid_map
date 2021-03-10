@@ -89,6 +89,9 @@ target_link_libraries(${PROJECT_NAME}
 add_executable(${PROJECT_NAME}_node src/test.cpp)
 target_link_libraries(${PROJECT_NAME}_node ${catkin_LIBRARIES})
 
+add_executable(${PROJECT_NAME}_pub_data_node src/test_pub_data.cpp)
+target_link_libraries(${PROJECT_NAME}_pub_data_node ${catkin_LIBRARIES})
+
 #############
 ## Install ##
 #############
