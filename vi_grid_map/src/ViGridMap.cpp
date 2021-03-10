@@ -57,8 +57,6 @@ void ViGridMap::msg_set()
     vi_grid_map_msgs::ViGridCells msg;
     
     msg.cells.resize(int(_width * _length* pow(1/_resolution, 2)));
-    msg.header.frame_id = "vi_map";
-    msg.header.stamp = ros::Time::now();
     msg.cell_width = _resolution;
     msg.cell_height = _resolution;
 
