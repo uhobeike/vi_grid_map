@@ -14,7 +14,7 @@ public:
     virtual ~ViGridMap();
 
     void vi_grid_map_init();
-    void msg_set();
+    void search_vi_grid_cells_value_min(vi_grid_map_msgs::ViGridCells& msg);
 
     void grid_valueCb(const vi_grid_map_msgs::ViGridCells& grid_value);
     void publish(vi_grid_map_msgs::ViGridCells& msg);
@@ -32,6 +32,8 @@ private:
     int _loop_index;
     int _loop_width;
     int _loop_length;
+    int _loop_width_length;
+    float _vi_grid_cells_value_min;
 
 };
 
