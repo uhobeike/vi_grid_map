@@ -59,7 +59,7 @@ Visualization Manager:
       Enabled: true
       Name: map
       Topic: /map
-    - Alpha: 0.2
+    - Alpha: 1
       Class: rviz/ViGridCells
       Enabled: true
       Name: ViGridCells
