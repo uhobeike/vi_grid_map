@@ -86,11 +86,30 @@ target_link_libraries(${PROJECT_NAME}
 
 
 ## Declare a C++ executable
-add_executable(${PROJECT_NAME}_node src/test.cpp)
-target_link_libraries(${PROJECT_NAME}_node ${catkin_LIBRARIES})
+add_executable(${PROJECT_NAME}_node 
+  src/test.cpp
+)
+target_link_libraries(
+  ${PROJECT_NAME}_node 
+  ${catkin_LIBRARIES}
+)
 
-add_executable(${PROJECT_NAME}_pub_data_node src/test_pub_data.cpp)
-target_link_libraries(${PROJECT_NAME}_pub_data_node ${catkin_LIBRARIES})
+add_executable(${PROJECT_NAME}_pub_data_node 
+  src/test_pub_data.cpp
+)
+target_link_libraries(
+  ${PROJECT_NAME}_pub_data_node 
+  ${catkin_LIBRARIES}
+)
+
+add_executable(vi_grid_map_pub
+  src/ViGridMap_node.cpp
+  src/ViGridMap.cpp
+)
+target_link_libraries(
+  vi_grid_map_pub
+  ${catkin_LIBRARIES}
+)
 
 #############
 ## Install ##
@@ -104,7 +123,8 @@ install(DIRECTORY include/ DESTINATION include)
 install(TARGETS ${PROJECT_NAME}
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
-  RUNTIME DESTINATION bin)
+  RUNTIME DESTINATION bin
+)
 
 #############
 ## Testing ##
