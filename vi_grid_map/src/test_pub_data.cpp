@@ -33,7 +33,7 @@ int main(int argc, char** argv){
     vi_grid_map_msgs::ViGridCells vi_grid_cells;
     vi_grid_cells.cell_value = file_read;
     
-    ros::Rate loop_rate(0.3);
+    ros::Rate loop_rate(1);
     while (ros::ok)
     {
         pub_data.publish(vi_grid_cells);
