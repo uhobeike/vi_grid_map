@@ -239,7 +239,7 @@ void ViGridCellsDisplay::incomingMessage(const vi_grid_map_msgs::ViGridCells::Co
 
   cloud_->setDimensions(msg->cell_width, msg->cell_height, 0.0);
 
-  Ogre::ColourValue vi_gird_color;
+  Ogre::ColourValue vi_gird_color, vi_gird_alpha_chanel;
   uint32_t num_points = msg->cells.size();
 
   typedef std::vector<PointCloud::Point> V_Point;
@@ -251,8 +251,18 @@ void ViGridCellsDisplay::incomingMessage(const vi_grid_map_msgs::ViGridCells::Co
     current_point.position.x = msg->cells[i].x;
     current_point.position.y = msg->cells[i].y;
     current_point.position.z = msg->cells[i].z;
-    float color = colorvalue_changer(msg->cell_value[i], 0, msg->cell_value[2]);
-    current_point.color = getRainbowColor(color, vi_gird_color);
+    if(msg->cell_value[i+3] != 0){
+      float color = colorvalue_changer(msg->cell_value[i+3], msg->cell_value[1], msg->cell_value[2]);
+      current_point.color = getRainbowColor(color, vi_gird_color);
+    }
+    else {
+      vi_gird_alpha_chanel[0] = 0;
+      vi_gird_alpha_chanel[1] = 0;
+      vi_gird_alpha_chanel[2] = 0;
+      vi_gird_alpha_chanel[3] = 0;
+
+      current_point.color = vi_gird_alpha_chanel;
+    }
   }
 
   cloud_->clear();
