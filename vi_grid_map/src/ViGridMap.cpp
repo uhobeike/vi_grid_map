@@ -2,16 +2,18 @@
 
 #include "vi_grid_map/ViGridMap.hpp"
 #include "vi_grid_map_msgs/ViGridCells.h"
-#include "math.h"
+
+#include <math.h>
 
 using namespace::std;
 
 namespace vi_grid_map {
 
-ViGridMap::ViGridMap(ros::NodeHandle& nodeHandle) :
+ViGridMap::ViGridMap(ros::NodeHandle& nodeHandle, nav_msgs::OccupancyGrid& map) :
                     _nh(nodeHandle),
-                    _width(19.2), _length(19.2),
-                    _resolution(0.06),
+                    _map(map),
+                    _width(0.0), _length(0.0),
+                    _resolution(0.0),
                     _resolution_Reciprocal(0.0),
                     _loop_index(0), _loop_width(0), _loop_length(0), _loop_width_length(0),
                     _vi_grid_cells_value_min(0)
@@ -50,6 +52,9 @@ void ViGridMap::grid_valueCb(const vi_grid_map_msgs::ViGridCells& grid_value)
 
 void ViGridMap::vi_grid_map_init()
 {
+    _width = _map.info.width * _map.info.resolution;
+    _length = _map.info.height * _map.info.resolution;
+    _resolution = _map.info.resolution;
     _resolution_Reciprocal = 1/_resolution;
     _loop_index = max(_width, _length) * _resolution_Reciprocal;
     _loop_width = _width * _resolution_Reciprocal;

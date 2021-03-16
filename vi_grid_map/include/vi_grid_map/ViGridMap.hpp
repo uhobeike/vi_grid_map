@@ -3,6 +3,8 @@
 
 #include <ros/ros.h>
 
+#include <nav_msgs/OccupancyGrid.h>
+
 #include "vi_grid_map_msgs/ViGridCells.h"
 
 namespace vi_grid_map {
@@ -10,7 +12,7 @@ namespace vi_grid_map {
 class ViGridMap
 {
 public:
-    ViGridMap(ros::NodeHandle& nodeHandle);
+    ViGridMap(ros::NodeHandle& nodeHandle, nav_msgs::OccupancyGrid& map);
     virtual ~ViGridMap();
 
     void vi_grid_map_init();
@@ -24,6 +26,8 @@ private:
 
     ros::Subscriber _vi_valueSubscriber;
     ros::Publisher _vi_grid_mapPublisher;
+
+    nav_msgs::OccupancyGrid _map;
 
     float _width;
     float _length;
