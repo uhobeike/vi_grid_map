@@ -5,11 +5,11 @@
 
     <!-- Set tf -->
     <node pkg="tf" type="static_transform_publisher" name="world_to_map" args="0 0 0 0 0 0 world map 100" />
-    <node pkg="tf" type="static_transform_publisher" name="map_to_vi_map" args="-9.969 -9.969 0 0 0 0 map vi_map 100" />
+    <node pkg="tf" type="static_transform_publisher" name="map_to_vi_map" args="-9.969 -9.969 0 0 0 0 world vi_map 100" />
 
     <!-- node launch -->     
     <node pkg="vi_grid_map" name="vi_grid_map_pub_data_node" type="vi_grid_map_pub_data_node" args="$(arg pgm_data_file)" output="screen"/>
-    <node pkg="vi_grid_map" name="vi_grid_map_pub" type="vi_grid_map_pub" output="screen"/>
+    <node pkg="vi_grid_map" name="vi_grid_map_node" type="vi_grid_map_node" output="screen"/>
 
     <!-- Launch the map server  -->
     <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" output="screen" />
