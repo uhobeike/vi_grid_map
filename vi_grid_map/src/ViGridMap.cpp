@@ -64,8 +64,8 @@ void ViGridMap::search_vi_grid_cells_value_min(vi_grid_map_msgs::ViGridCells& ms
 {
     bool init_search_value_flag = false;
     for (int i = 0; i < _loop_width_length-1; ++i){
-        if(msg.cell_value[i] != 0){
-            if(!init_search_value_flag){
+        if (msg.cell_value[i] != 0){
+            if (!init_search_value_flag){
                 _vi_grid_cells_value_min = msg.cell_value[i];
                 init_search_value_flag = true;
             }

@@ -11,7 +11,7 @@ int main(int argc, char** argv)
     ros::init(argc, argv, "vi_grid_map");
     ros::NodeHandle nh;
 
-	while(!ros::service::waitForService("/static_map", ros::Duration(5.0))){
+	while (!ros::service::waitForService("/static_map", ros::Duration(5.0))){
 		ROS_ERROR("Service not found /static_map");
 		return 1;
 	}
@@ -20,7 +20,7 @@ int main(int argc, char** argv)
 
 	nav_msgs::GetMap::Request req;
 	nav_msgs::GetMap::Response resp;
-	if(not client.call(req, resp)){
+	if (not client.call(req, resp)){
 		ROS_ERROR("static_map not working");
 		return 1;
 	}

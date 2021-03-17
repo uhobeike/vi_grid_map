@@ -240,11 +240,11 @@ void ViGridCellsDisplay::incomingMessage(const vi_grid_map_msgs::ViGridCells::Co
         current_point.position.x = msg->cells[i].x;
         current_point.position.y = msg->cells[i].y;
         current_point.position.z = msg->cells[i].z;
-        if(msg->cell_value[i+3] != 0){
+        if (msg->cell_value[i+3] != 0){
             float color = colorvalue_changer(msg->cell_value[i+3], msg->cell_value[1], msg->cell_value[2]);
             current_point.color = getRainbowColor(color, vi_gird_color);
         }
-        else{
+        else {
             vi_gird_alpha_chanel[0] = 0;
             vi_gird_alpha_chanel[1] = 0;
             vi_gird_alpha_chanel[2] = 0;
