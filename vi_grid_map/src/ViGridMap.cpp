@@ -35,10 +35,8 @@ void ViGridMap::grid_valueCb(const vi_grid_map_msgs::ViGridCells& grid_value)
     msg.cell_width = _resolution;
     msg.cell_height = _resolution;
 
-    for (int x = 0; x < _loop_width; ++x)
-    {
-        for (int y = 0; y < _loop_length; ++y)
-        {
+    for (int x = 0; x < _loop_width; ++x){
+        for (int y = 0; y < _loop_length; ++y){
             geometry_msgs::Point& point = msg.cells[x + ( y * _loop_index)];
             point.x = float(x) * _resolution;
             point.y = float(y) * _resolution;

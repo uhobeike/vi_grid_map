@@ -33,41 +33,41 @@ class ViGridCellsDisplay : public Display
 {
   Q_OBJECT
 public:
-  ViGridCellsDisplay();
-  ~ViGridCellsDisplay() override;
+    ViGridCellsDisplay();
+    ~ViGridCellsDisplay() override;
 
-  void onInitialize() override;
+    void onInitialize() override;
 
-  // Overrides from Display
-  void fixedFrameChanged() override;
-  void reset() override;
+    // Overrides from Display
+    void fixedFrameChanged() override;
+    void reset() override;
 
 protected:
-  // overrides from Display
-  void onEnable() override;
-  void onDisable() override;
+    // overrides from Display
+    void onEnable() override;
+    void onDisable() override;
 
 private Q_SLOTS:
-  void updateAlpha();
-  void updateTopic();
+    void updateAlpha();
+    void updateTopic();
 
 private:
-  void subscribe();
-  void unsubscribe();
-  void clear();
-  void incomingMessage(const vi_grid_map_msgs::ViGridCells::ConstPtr& msg);
+    void subscribe();
+    void unsubscribe();
+    void clear();
+    void incomingMessage(const vi_grid_map_msgs::ViGridCells::ConstPtr& msg);
 
-  PointCloud* cloud_;
+    PointCloud* cloud_;
 
-  message_filters::Subscriber<vi_grid_map_msgs::ViGridCells> sub_;
-  tf::MessageFilter<vi_grid_map_msgs::ViGridCells>* tf_filter_;
+    message_filters::Subscriber<vi_grid_map_msgs::ViGridCells> sub_;
+    tf::MessageFilter<vi_grid_map_msgs::ViGridCells>* tf_filter_;
 
-  ColorProperty* color_property_;
-  RosTopicProperty* topic_property_;
-  FloatProperty* alpha_property_;
+    ColorProperty* color_property_;
+    RosTopicProperty* topic_property_;
+    FloatProperty* alpha_property_;
 
-  uint32_t messages_received_;
-  uint64_t last_frame_count_;
+    uint32_t messages_received_;
+    uint64_t last_frame_count_;
 };
 
 } // namespace rviz

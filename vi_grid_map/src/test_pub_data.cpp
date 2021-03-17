@@ -7,7 +7,8 @@
 
 using namespace::std;
 
-int main(int argc, char** argv){
+int main(int argc, char** argv)
+{
     ros::init(argc, argv, "pub_data");
     ros::NodeHandle nh;
     ros::Publisher pub_data;
@@ -19,14 +20,12 @@ int main(int argc, char** argv){
     vector<float> file_read;
 
     ifstream f_r(fname.c_str(), std::ios::in);
-    if (f_r.fail()) 
-    {
+    if (f_r.fail()){
         ROS_ERROR("csv_file could not open %s.", fname.c_str());
         exit(-1);
     }
 
-    while (getline(f_r, line)) 
-    {
+    while (getline(f_r, line)){
         istringstream stream(line);
         file_read.push_back(stof(line));
     }
@@ -34,8 +33,7 @@ int main(int argc, char** argv){
     vi_grid_cells.cell_value = file_read;
     
     ros::Rate loop_rate(1);
-    while (ros::ok)
-    {
+    while (ros::ok){
         pub_data.publish(vi_grid_cells);
 
         ros::spinOnce();
@@ -43,5 +41,4 @@ int main(int argc, char** argv){
     }
     
     return 0;
-
 }
