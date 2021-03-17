@@ -11,9 +11,9 @@ int main(int argc, char** argv)
     ros::init(argc, argv, "vi_grid_map");
     ros::NodeHandle nh;
 
-    while(!ros::service::waitForService("/static_map", ros::Duration(5.0))){
+	while(!ros::service::waitForService("/static_map", ros::Duration(5.0))){
 		ROS_ERROR("Service not found /static_map");
-        return 1;
+		return 1;
 	}
 
 	ros::ServiceClient client = nh.serviceClient<nav_msgs::GetMap>("/static_map");
