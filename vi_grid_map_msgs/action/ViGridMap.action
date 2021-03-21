@@ -1,0 +1,11 @@
+#goal definition
+int8 vi_value_theta_num_set
+int8 vi_action_theta_num_set
+---
+#result definition
+int8 vi_value_theta_num_current
+int8 vi_action_theta_num_current
+---
+#feedback
+string vi_value_theta_num_status
+string vi_action_theta_num_status
