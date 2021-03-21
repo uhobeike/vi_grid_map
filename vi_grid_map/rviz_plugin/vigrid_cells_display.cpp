@@ -25,6 +25,11 @@ ViGridCellsDisplay::ViGridCellsDisplay() : Display(), messages_received_(0), las
     alpha_property_->setMin(0);
     alpha_property_->setMax(1);
 
+    vi_value_theta_num_set_property_ = new FloatProperty("Value_theta_num_set", 0.0, "Specify the angle of the value map.",
+                                        this, SLOT(updateValue_theta_num()));
+    vi_value_theta_num_set_property_->setMin(0);
+    vi_value_theta_num_set_property_->setMax(60);
+
     topic_property_ =
         new RosTopicProperty("Topic", "",
                             QString::fromStdString(ros::message_traits::datatype<vi_grid_map_msgs::ViGridCells>()),
@@ -101,6 +106,31 @@ void ViGridCellsDisplay::updateTopic()
 void ViGridCellsDisplay::updateAlpha()
 {
     cloud_->setAlpha(alpha_property_->getFloat());
+    context_->queueRender();
+}
+
+void ViGridCellsDisplay::updateValue_theta_num()
+{
+    try{
+        Client ac("vi_grid_map_node", true);
+        ac.waitForServer();
+        vi_grid_map_msgs::ViGridMapActionGoal goal;
+
+        goal.goal.vi_value_theta_num_set =  vi_value_theta_num_set_property_->getFloat();
+        ac.sendGoal(goal.goal);
+        bool finished_before_timeout = ac.waitForResult(ros::Duration(30.0));
+
+        if (finished_before_timeout){
+            actionlib::SimpleClientGoalState state = ac.getState();
+            ROS_INFO("Action finished: %s",state.toString().c_str());
+        }
+        else
+            ROS_INFO("Action did not finish before the time out.");
+    }
+    catch (const ros::Exception& e){
+        ROS_ERROR_STREAM_NAMED("GoalTool", e.what());
+    }
+    
     context_->queueRender();
 }
 

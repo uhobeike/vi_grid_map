@@ -6,6 +6,9 @@
 #include <vi_grid_map_msgs/ViGridCells.h>
 #include <nav_msgs/MapMetaData.h>
 
+#include <actionlib/client/simple_action_client.h>
+#include <vi_grid_map_msgs/ViGridMapAction.h>
+
 #ifndef Q_MOC_RUN
 #include <message_filters/subscriber.h>
 #include <tf/message_filter.h>
@@ -49,9 +52,14 @@ protected:
 
 private Q_SLOTS:
     void updateAlpha();
+    void updateValue_theta_num();
     void updateTopic();
 
 private:
+    ros::NodeHandle nh_;
+    ros::Publisher pub_;
+    typedef actionlib::SimpleActionClient<vi_grid_map_msgs::ViGridMapAction> Client;
+
     void subscribe();
     void unsubscribe();
     void clear();
@@ -65,6 +73,8 @@ private:
     ColorProperty* color_property_;
     RosTopicProperty* topic_property_;
     FloatProperty* alpha_property_;
+    FloatProperty* vi_value_theta_num_set_property_;
+
 
     uint32_t messages_received_;
     uint64_t last_frame_count_;
