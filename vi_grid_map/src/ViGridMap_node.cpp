@@ -26,7 +26,7 @@ int main(int argc, char** argv)
 	}
 	ros::service::call("static_map", req, resp);
 
-	vi_grid_map::ViGridMap vi(nh, resp.map);
+	vi_grid_map::ViGridMap vi(nh, ros::this_node::getName(), resp.map);
 
 	ros::spin();
 	return 0;

@@ -9,8 +9,10 @@ using namespace::std;
 
 namespace vi_grid_map {
 
-ViGridMap::ViGridMap(ros::NodeHandle& nodeHandle, nav_msgs::OccupancyGrid& map) :
+ViGridMap::ViGridMap(ros::NodeHandle& nodeHandle, std::string name, nav_msgs::OccupancyGrid& map) :
                     _nh(nodeHandle),
+                    _as(nodeHandle, name, boost::bind(&ViGridMap::executeCb, this, _1), false),
+                    _action_name(name), _success(true),
                     _map(map),
                     _width(0.0), _length(0.0),
                     _resolution(0.0),
@@ -22,6 +24,7 @@ ViGridMap::ViGridMap(ros::NodeHandle& nodeHandle, nav_msgs::OccupancyGrid& map) 
     _vi_grid_mapPublisher = _nh.advertise<vi_grid_map_msgs::ViGridCells>("grid_cells", 100);
 
     vi_grid_map_init();
+    _as.start();
 }
 
 ViGridMap::~ViGridMap() {}
@@ -81,6 +84,46 @@ void ViGridMap::publish(vi_grid_map_msgs::ViGridCells& msg)
     msg.header.frame_id = "vi_map";
     msg.header.stamp = ros::Time::now();
     _vi_grid_mapPublisher.publish(msg);
+}
+
+void ViGridMap::executeCb(const vi_grid_map_msgs::ViGridMapGoalConstPtr &goal)
+{
+    vi_grid_map_msgs::ViGridMapFeedback _feedback;
+    vi_grid_map_msgs::ViGridMapResult _result;
+    
+    _feedback.vi_value_theta_num_status.clear();
+    _feedback.vi_action_theta_num_status.clear();
+
+    _feedback.vi_value_theta_num_status = "Settinng value_theta_num.....";
+    _feedback.vi_action_theta_num_status = "Setting action_theta_num.....";
+    
+    // publish info to the console for the user
+    ROS_INFO("action: %s, goal: %i, %i, status: %s, %s", _action_name.c_str(), goal->vi_value_theta_num_set, goal->vi_action_theta_num_set,
+            _feedback.vi_value_theta_num_status.c_str(), _feedback.vi_action_theta_num_status.c_str());
+
+
+    // check that preempt has not been requested by the client
+    if (_as.isPreemptRequested() || !ros::ok()){
+        ROS_WARN("%s: Preempted", _action_name.c_str());
+        _as.setPreempted();
+        _success = false;
+    }
+    
+    _feedback.vi_value_theta_num_status = "Set value_theta_num";
+    _feedback.vi_action_theta_num_status = "Set action_theta_num";
+    // publish the feedback
+    _as.publishFeedback(_feedback);
+
+
+    if (_success){
+        _result.vi_value_theta_num_current = 1;
+        _result.vi_action_theta_num_current = 1;
+
+        ROS_INFO("%s: Succeeded", _action_name.c_str());
+        // set the action state to succeeded
+        _as.setSucceeded(_result);
+    }
+    
 }
 
 } /* namespace */
