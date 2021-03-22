@@ -118,14 +118,14 @@ void ViGridCellsDisplay::updateValue_theta_num()
 
         goal.goal.vi_value_theta_num_set =  vi_value_theta_num_set_property_->getFloat();
         ac.sendGoal(goal.goal);
-        bool finished_before_timeout = ac.waitForResult(ros::Duration(30.0));
+        bool finished_before_timeout = ac.waitForResult(ros::Duration(5.0));
 
         if (finished_before_timeout){
             actionlib::SimpleClientGoalState state = ac.getState();
             ROS_INFO("Action finished: %s",state.toString().c_str());
         }
         else
-            ROS_INFO("Action did not finish before the time out.");
+            ROS_ERROR("Action did not finish before the time out.");
     }
     catch (const ros::Exception& e){
         ROS_ERROR_STREAM_NAMED("GoalTool", e.what());
