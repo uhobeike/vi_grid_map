@@ -31,6 +31,7 @@ int main(int argc, char** argv)
     }
     vi_grid_map_msgs::ViGridCells vi_grid_cells;
     vi_grid_cells.cell_value = file_read;
+    vi_grid_cells.cell_theta_total_num = 60;
     
     ros::Rate loop_rate(1);
     while (ros::ok){

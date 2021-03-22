@@ -9,6 +9,8 @@
 #include <vi_grid_map_msgs/ViGridCells.h>
 #include <vi_grid_map_msgs/ViGridMapAction.h>
 
+using namespace::std;
+
 namespace vi_grid_map {
 
 class ViGridMap
@@ -22,6 +24,7 @@ public:
 
     void grid_valueCb(const vi_grid_map_msgs::ViGridCells& grid_value);
     void publish(vi_grid_map_msgs::ViGridCells& msg);
+    void vi_value_stock_up(vi_grid_map_msgs::ViGridCells& msg);
 
     void executeCb(const vi_grid_map_msgs::ViGridMapGoalConstPtr &goal);
 
@@ -31,11 +34,10 @@ private:
     ros::Subscriber _vi_valueSubscriber;
     ros::Publisher _vi_grid_mapPublisher;
     actionlib::SimpleActionServer<vi_grid_map_msgs::ViGridMapAction> _as; 
-
-    nav_msgs::OccupancyGrid _map;
-
     std::string _action_name;
     bool _success;
+
+    nav_msgs::OccupancyGrid _map;
 
     float _width;
     float _length;
@@ -46,6 +48,11 @@ private:
     int _loop_length;
     int _loop_width_length;
     float _vi_grid_cells_value_min;
+    
+    vector <vector<vi_grid_map_msgs::ViGridCells>> _vi_value_store;
+    vector <vector<vi_grid_map_msgs::ViGridCells>> _vi_action_store;
+    uint8_t _vi_value_index;
+    uint8_t _vi_action_index;
 
 };
 

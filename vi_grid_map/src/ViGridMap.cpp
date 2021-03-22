@@ -34,12 +34,14 @@ void ViGridMap::grid_valueCb(const vi_grid_map_msgs::ViGridCells& grid_value)
     vi_grid_map_msgs::ViGridCells msg;
 
     msg = grid_value;
+    vi_value_stock_up(msg);
+
     msg.cells.resize(int(_width * _length* pow(1/_resolution, 2)));
     msg.cell_width = _resolution;
     msg.cell_height = _resolution;
 
-    for (int x = 0; x < _loop_width; ++x){
-        for (int y = 0; y < _loop_length; ++y){
+    for (int x(0); x < _loop_width; ++x){
+        for (int y(0); y < _loop_length; ++y){
             geometry_msgs::Point& point = msg.cells[x + ( y * _loop_index)];
             point.x = float(x) * _resolution;
             point.y = float(y) * _resolution;
@@ -66,7 +68,7 @@ void ViGridMap::vi_grid_map_init()
 void ViGridMap::search_vi_grid_cells_value_min(vi_grid_map_msgs::ViGridCells& msg)
 {
     bool init_search_value_flag = false;
-    for (int i = 0; i < _loop_width_length-1; ++i){
+    for (int i(2); i < _loop_width_length-1; ++i){
         if (msg.cell_value[i] != 0){
             if (!init_search_value_flag){
                 _vi_grid_cells_value_min = msg.cell_value[i];
@@ -84,6 +86,17 @@ void ViGridMap::publish(vi_grid_map_msgs::ViGridCells& msg)
     msg.header.frame_id = "vi_map";
     msg.header.stamp = ros::Time::now();
     _vi_grid_mapPublisher.publish(msg);
+}
+
+void ViGridMap::vi_value_stock_up(vi_grid_map_msgs::ViGridCells& msg)
+{
+    _vi_value_store.resize(msg.cell_theta_total_num);
+    for (uint8_t i(0); i <= msg.cell_theta_total_num; ++i){
+        if (i == msg.cell_value[0]){
+            _vi_value_store[i].clear();
+            _vi_value_store[i].push_back(msg);
+        }
+    }
 }
 
 void ViGridMap::executeCb(const vi_grid_map_msgs::ViGridMapGoalConstPtr &goal)
@@ -111,9 +124,9 @@ void ViGridMap::executeCb(const vi_grid_map_msgs::ViGridMapGoalConstPtr &goal)
     
     _feedback.vi_value_theta_num_status = "Set value_theta_num";
     _feedback.vi_action_theta_num_status = "Set action_theta_num";
+    _feedback.vi_value_store_status = _vi_value_store.size();
     // publish the feedback
     _as.publishFeedback(_feedback);
-
 
     if (_success){
         _result.vi_value_theta_num_current = 1;
