@@ -9,4 +9,5 @@ uint8 vi_action_theta_num_current
 #feedback
 string vi_value_theta_num_status
 string vi_action_theta_num_status
-uint8 vi_value_store_status
+string vi_value_stock_up_check_status
+uint8 vi_value_store_max_index
