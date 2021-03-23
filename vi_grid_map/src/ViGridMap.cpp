@@ -18,7 +18,7 @@ ViGridMap::ViGridMap(ros::NodeHandle& nodeHandle, std::string name, nav_msgs::Oc
                     _resolution(0.0),
                     _resolution_Reciprocal(0.0),
                     _loop_index(0), _loop_width(0), _loop_length(0), _loop_width_length(0),
-                    _vi_grid_cells_value_min(0)
+                    _vi_grid_cells_value_min(0), _vi_cell_theta_total_num(0)
 {
     _vi_valueSubscriber   = _nh.subscribe("grid_value", 1, &ViGridMap::grid_valueCb, this);
     _vi_grid_mapPublisher = _nh.advertise<vi_grid_map_msgs::ViGridCells>("grid_cells", 100);
@@ -34,6 +34,7 @@ void ViGridMap::grid_valueCb(const vi_grid_map_msgs::ViGridCells& grid_value)
     vi_grid_map_msgs::ViGridCells msg;
 
     msg = grid_value;
+    _vi_cell_theta_total_num = msg.cell_theta_total_num;
     vi_value_stock_up(msg);
 
     msg.cells.resize(int(_width * _length* pow(1/_resolution, 2)));
@@ -99,6 +100,21 @@ void ViGridMap::vi_value_stock_up(vi_grid_map_msgs::ViGridCells& msg)
     }
 }
 
+bool ViGridMap::vi_value_stock_up_check()
+{
+    int cnt_index(0);
+    for (uint8_t i(0); i <= _vi_cell_theta_total_num; ++i){
+        
+        if (_vi_value_store[i].size() == 1)
+            ++cnt_index;
+    }
+
+    if (cnt_index == 1)
+        return true;
+    else 
+        return false;
+}
+
 void ViGridMap::executeCb(const vi_grid_map_msgs::ViGridMapGoalConstPtr &goal)
 {
     vi_grid_map_msgs::ViGridMapFeedback _feedback;
@@ -124,7 +140,8 @@ void ViGridMap::executeCb(const vi_grid_map_msgs::ViGridMapGoalConstPtr &goal)
     
     _feedback.vi_value_theta_num_status = "Set value_theta_num";
     _feedback.vi_action_theta_num_status = "Set action_theta_num";
-    _feedback.vi_value_store_status = _vi_value_store.size();
+    _feedback.vi_value_stock_up_check_status = vi_value_stock_up_check() ? "true" : "false";
+    _feedback.vi_value_store_max_index = _vi_cell_theta_total_num;
     // publish the feedback
     _as.publishFeedback(_feedback);
 

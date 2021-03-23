@@ -25,6 +25,7 @@ public:
     void grid_valueCb(const vi_grid_map_msgs::ViGridCells& grid_value);
     void publish(vi_grid_map_msgs::ViGridCells& msg);
     void vi_value_stock_up(vi_grid_map_msgs::ViGridCells& msg);
+    bool vi_value_stock_up_check();
 
     void executeCb(const vi_grid_map_msgs::ViGridMapGoalConstPtr &goal);
 
@@ -48,6 +49,7 @@ private:
     int _loop_length;
     int _loop_width_length;
     float _vi_grid_cells_value_min;
+    uint8_t _vi_cell_theta_total_num;
     
     vector <vector<vi_grid_map_msgs::ViGridCells>> _vi_value_store;
     vector <vector<vi_grid_map_msgs::ViGridCells>> _vi_action_store;
