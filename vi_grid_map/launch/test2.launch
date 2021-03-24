@@ -16,5 +16,5 @@
 
     <!-- rviz -->
     <node pkg="rviz" type="rviz" name="rviz" required="true"
-            args="-d $(find vi_grid_map)/config/rviz/test.rviz" />
+            args="-d $(find vi_grid_map)/config/rviz/test.rviz" output="screen"/>
 </launch>
