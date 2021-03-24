@@ -20,12 +20,14 @@ public:
     virtual ~ViGridMap();
 
     void vi_grid_map_init();
+    void CellPlacementCalculation(vi_grid_map_msgs::ViGridCells& msg);
     void search_vi_grid_cells_value_min(vi_grid_map_msgs::ViGridCells& msg);
 
     void grid_valueCb(const vi_grid_map_msgs::ViGridCells& grid_value);
     void publish(vi_grid_map_msgs::ViGridCells& msg);
     void vi_value_stock_up(vi_grid_map_msgs::ViGridCells& msg);
     bool vi_value_stock_up_check();
+    void ChangeThetaViMap(const vi_grid_map_msgs::ViGridMapGoalConstPtr &goal);
 
     void executeCb(const vi_grid_map_msgs::ViGridMapGoalConstPtr &goal);
 

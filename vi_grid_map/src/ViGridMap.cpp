@@ -34,23 +34,14 @@ void ViGridMap::grid_valueCb(const vi_grid_map_msgs::ViGridCells& grid_value)
     vi_grid_map_msgs::ViGridCells msg;
 
     msg = grid_value;
+
     _vi_cell_theta_total_num = msg.cell_theta_total_num;
+    
     vi_value_stock_up(msg);
 
-    msg.cells.resize(int(_width * _length* pow(1/_resolution, 2)));
-    msg.cell_width = _resolution;
-    msg.cell_height = _resolution;
-
-    for (int x(0); x < _loop_width; ++x){
-        for (int y(0); y < _loop_length; ++y){
-            geometry_msgs::Point& point = msg.cells[x + ( y * _loop_index)];
-            point.x = float(x) * _resolution;
-            point.y = float(y) * _resolution;
-            point.z = 0;
-        }
-    }
-
+    CellPlacementCalculation(msg);
     search_vi_grid_cells_value_min(msg);
+    
     publish(msg);
 }
 
@@ -66,10 +57,26 @@ void ViGridMap::vi_grid_map_init()
     _loop_width_length = _loop_width * _loop_length;
 }
 
+void ViGridMap::CellPlacementCalculation(vi_grid_map_msgs::ViGridCells& msg)
+{
+    msg.cells.resize(int(_width * _length* pow(1/_resolution, 2)));
+    msg.cell_width = _resolution;
+    msg.cell_height = _resolution;
+
+    for (int x(0); x < _loop_width; ++x){
+        for (int y(0); y < _loop_length; ++y){
+            geometry_msgs::Point& point = msg.cells[x + ( y * _loop_index)];
+            point.x = float(x) * _resolution;
+            point.y = float(y) * _resolution;
+            point.z = 0;
+        }
+    }
+}
+
 void ViGridMap::search_vi_grid_cells_value_min(vi_grid_map_msgs::ViGridCells& msg)
 {
     bool init_search_value_flag = false;
-    for (int i(2); i < _loop_width_length-1; ++i){
+    for (int i(3); i < _loop_width_length-1; ++i){
         if (msg.cell_value[i] != 0){
             if (!init_search_value_flag){
                 _vi_grid_cells_value_min = msg.cell_value[i];
@@ -92,6 +99,7 @@ void ViGridMap::publish(vi_grid_map_msgs::ViGridCells& msg)
 void ViGridMap::vi_value_stock_up(vi_grid_map_msgs::ViGridCells& msg)
 {
     _vi_value_store.resize(msg.cell_theta_total_num);
+
     for (uint8_t i(0); i <= msg.cell_theta_total_num; ++i){
         if (i == msg.cell_value[0]){
             _vi_value_store[i].clear();
@@ -103,16 +111,27 @@ void ViGridMap::vi_value_stock_up(vi_grid_map_msgs::ViGridCells& msg)
 bool ViGridMap::vi_value_stock_up_check()
 {
     int cnt_index(0);
+
     for (uint8_t i(0); i <= _vi_cell_theta_total_num; ++i){
         
         if (_vi_value_store[i].size() == 1)
             ++cnt_index;
     }
 
-    if (cnt_index == 1)
+    if (cnt_index == _vi_cell_theta_total_num)
         return true;
     else 
         return false;
+}
+
+void ViGridMap::ChangeThetaViMap(const vi_grid_map_msgs::ViGridMapGoalConstPtr &goal)
+{
+    vi_grid_map_msgs::ViGridCells msg;
+    msg = _vi_value_store[goal->vi_value_theta_num_set][0];
+    CellPlacementCalculation(msg);
+    search_vi_grid_cells_value_min(msg);
+    
+    publish(msg);
 }
 
 void ViGridMap::executeCb(const vi_grid_map_msgs::ViGridMapGoalConstPtr &goal)
@@ -127,13 +146,12 @@ void ViGridMap::executeCb(const vi_grid_map_msgs::ViGridMapGoalConstPtr &goal)
     _feedback.vi_value_theta_num_status = "Settinng value_theta_num.....";
     _feedback.vi_action_theta_num_status = "Setting action_theta_num.....";
     
-    // publish info to the console for the user
-    ROS_INFO("action: %s, goal: %i, %i, status: %s, %s", _action_name.c_str(), goal->vi_value_theta_num_set, goal->vi_action_theta_num_set,
+    ROS_INFO("%s: PROCESSING\ngoal:\n       vi_value_theta_num: %i, vi_action_theta_num: %i\nstatus:\n      vi_value_theta_num_status: %s, vi_action_theta_num_status: %s"
+            ,_action_name.c_str(), goal->vi_value_theta_num_set, goal->vi_action_theta_num_set,
             _feedback.vi_value_theta_num_status.c_str(), _feedback.vi_action_theta_num_status.c_str());
 
     ros::Rate loop_rate(1);
     while (_feedback.vi_value_stock_up_check_status != "true"){
-        // check that preempt has not been requested by the client
         if (_as.isPreemptRequested() || !ros::ok()){
             ROS_WARN("%s: Preempted", _action_name.c_str());
             _as.setPreempted();
@@ -152,11 +170,16 @@ void ViGridMap::executeCb(const vi_grid_map_msgs::ViGridMapGoalConstPtr &goal)
     }
     
     if (_success){
+        ChangeThetaViMap(goal);
         _feedback.vi_value_theta_num_status = "Set value_theta_num";
         _feedback.vi_action_theta_num_status = "Set action_theta_num";
         _as.publishFeedback(_feedback);
-        _result.vi_value_theta_num_current = 1;
-        _result.vi_action_theta_num_current = 1;
+        
+        ROS_INFO("\nstatus:\n      vi_value_theta_num_status: %s, vi_action_theta_num_status: %s"
+                ,_feedback.vi_value_theta_num_status.c_str(), _feedback.vi_action_theta_num_status.c_str());
+
+        _result.vi_value_theta_num_current = goal->vi_value_theta_num_set;
+        _result.vi_action_theta_num_current = goal->vi_action_theta_num_set;
 
         ROS_INFO("%s: SUCCEEDED", _action_name.c_str());
         _as.setSucceeded(_result);
@@ -165,10 +188,10 @@ void ViGridMap::executeCb(const vi_grid_map_msgs::ViGridMapGoalConstPtr &goal)
         _feedback.vi_value_theta_num_status = "Can't Set value_theta_num";
         _feedback.vi_action_theta_num_status = "Cant't Set action_theta_num";
         _as.publishFeedback(_feedback);
+
         ROS_ERROR("%s: FAILURE", _action_name.c_str());
         _as.setAborted(_result);
     }
-    
 }
 
 } /* namespace */
