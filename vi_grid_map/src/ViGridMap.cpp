@@ -122,6 +122,7 @@ void ViGridMap::executeCb(const vi_grid_map_msgs::ViGridMapGoalConstPtr &goal)
     
     _feedback.vi_value_theta_num_status.clear();
     _feedback.vi_action_theta_num_status.clear();
+    _feedback.vi_value_stock_up_check_status.clear();
 
     _feedback.vi_value_theta_num_status = "Settinng value_theta_num.....";
     _feedback.vi_action_theta_num_status = "Setting action_theta_num.....";
@@ -130,28 +131,42 @@ void ViGridMap::executeCb(const vi_grid_map_msgs::ViGridMapGoalConstPtr &goal)
     ROS_INFO("action: %s, goal: %i, %i, status: %s, %s", _action_name.c_str(), goal->vi_value_theta_num_set, goal->vi_action_theta_num_set,
             _feedback.vi_value_theta_num_status.c_str(), _feedback.vi_action_theta_num_status.c_str());
 
+    ros::Rate loop_rate(1);
+    while (_feedback.vi_value_stock_up_check_status != "true"){
+        // check that preempt has not been requested by the client
+        if (_as.isPreemptRequested() || !ros::ok()){
+            ROS_WARN("%s: Preempted", _action_name.c_str());
+            _as.setPreempted();
+            _success = false;
+            break;
+        }
+        
+        _feedback.vi_value_stock_up_check_status = vi_value_stock_up_check() ? "true" : "false";
+        _feedback.vi_value_store_max_index = _vi_cell_theta_total_num;
+        _as.publishFeedback(_feedback);
 
-    // check that preempt has not been requested by the client
-    if (_as.isPreemptRequested() || !ros::ok()){
-        ROS_WARN("%s: Preempted", _action_name.c_str());
-        _as.setPreempted();
-        _success = false;
+        if (_feedback.vi_value_stock_up_check_status != "true")
+            ROS_WARN("vi_value_stock_up_check(): false");
+        
+        loop_rate.sleep();
     }
     
-    _feedback.vi_value_theta_num_status = "Set value_theta_num";
-    _feedback.vi_action_theta_num_status = "Set action_theta_num";
-    _feedback.vi_value_stock_up_check_status = vi_value_stock_up_check() ? "true" : "false";
-    _feedback.vi_value_store_max_index = _vi_cell_theta_total_num;
-    // publish the feedback
-    _as.publishFeedback(_feedback);
-
     if (_success){
+        _feedback.vi_value_theta_num_status = "Set value_theta_num";
+        _feedback.vi_action_theta_num_status = "Set action_theta_num";
+        _as.publishFeedback(_feedback);
         _result.vi_value_theta_num_current = 1;
         _result.vi_action_theta_num_current = 1;
 
-        ROS_INFO("%s: Succeeded", _action_name.c_str());
-        // set the action state to succeeded
+        ROS_INFO("%s: SUCCEEDED", _action_name.c_str());
         _as.setSucceeded(_result);
+    }
+    else {
+        _feedback.vi_value_theta_num_status = "Can't Set value_theta_num";
+        _feedback.vi_action_theta_num_status = "Cant't Set action_theta_num";
+        _as.publishFeedback(_feedback);
+        ROS_ERROR("%s: FAILURE", _action_name.c_str());
+        _as.setAborted(_result);
     }
     
 }
