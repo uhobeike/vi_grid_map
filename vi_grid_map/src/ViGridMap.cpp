@@ -113,7 +113,6 @@ bool ViGridMap::vi_value_stock_up_check()
     int cnt_index(0);
 
     for (uint8_t i(0); i <= _vi_cell_theta_total_num; ++i){
-        
         if (_vi_value_store[i].size() == 1)
             ++cnt_index;
     }
@@ -127,7 +126,7 @@ bool ViGridMap::vi_value_stock_up_check()
 void ViGridMap::ChangeThetaViMap(const vi_grid_map_msgs::ViGridMapGoalConstPtr &goal)
 {
     vi_grid_map_msgs::ViGridCells msg;
-    msg = _vi_value_store[goal->vi_value_theta_num_set][0];
+    msg = _vi_value_store[goal->vi_value_theta_num_set].front();
     CellPlacementCalculation(msg);
     search_vi_grid_cells_value_min(msg);
     
