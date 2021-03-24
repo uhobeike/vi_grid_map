@@ -18,7 +18,9 @@
 
 namespace rviz
 {
-ViGridCellsDisplay::ViGridCellsDisplay() : Display(), messages_received_(0), last_frame_count_(uint64_t(-1))
+ViGridCellsDisplay::ViGridCellsDisplay() : Display(),
+                                        messages_received_(0), 
+                                        last_frame_count_(uint64_t(-1))
 {
     alpha_property_ = new FloatProperty("Alpha", 1.0, "Amount of transparency to apply to the cells.",
                                         this, SLOT(updateAlpha()));
@@ -28,7 +30,7 @@ ViGridCellsDisplay::ViGridCellsDisplay() : Display(), messages_received_(0), las
     vi_value_theta_num_set_property_ = new FloatProperty("Value_theta_num_set", 0.0, "Specify the angle of the value map.",
                                         this, SLOT(updateValue_theta_num()));
     vi_value_theta_num_set_property_->setMin(0);
-    vi_value_theta_num_set_property_->setMax(60);
+    
 
     topic_property_ =
         new RosTopicProperty("Topic", "",
@@ -219,6 +221,8 @@ Ogre::ColourValue getRainbowColor(float value, Ogre::ColourValue& color)
 
 void ViGridCellsDisplay::incomingMessage(const vi_grid_map_msgs::ViGridCells::ConstPtr& msg)
 {
+    vi_value_theta_num_set_property_->setMax(msg->cell_theta_total_num - 1);
+
     if (!msg){
         return;
     }
@@ -282,8 +286,7 @@ void ViGridCellsDisplay::incomingMessage(const vi_grid_map_msgs::ViGridCells::Co
 
             current_point.color = vi_gird_alpha_chanel;
         }
-  }
-
+    }
     cloud_->clear();
 
     if (!points.empty()){
