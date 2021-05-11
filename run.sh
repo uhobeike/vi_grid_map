@@ -17,5 +17,6 @@ ros-ci_vi_grid_map /bin/bash -c \
     roslaunch value_iteration vi_map.launch; 
     /bin/bash"
 
+sudo chown -R $USER value_iteration
 cd -
 xhost -local:docker
