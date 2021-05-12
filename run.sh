@@ -10,7 +10,7 @@ docker run -it --rm --gpus all \
     -e LIBGL_ALWAYS_INDIRECT=1 \
     --privileged \
     --net=host \
-ros-ci_vi_grid_map /bin/bash -c \
+ubeike/ros-ci_vi_grid_map /bin/bash -c \
     "git clone -b ikebe_dev https://github.com/ryuichiueda/value_iteration.git;
     rosdep install -r -y --from-paths --ignore-src .; 
     cd /home/catkin_ws && catkin build && source /home/catkin_ws/devel/setup.bash; 
