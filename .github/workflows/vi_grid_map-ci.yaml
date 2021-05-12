@@ -12,11 +12,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: TEST
+      - name: MAKE WS
         run: |
-          ls
           mkdir -p ~/work/src && cp -rp ~/work/vi_grid_map ~/work/src/vi_grid_map
           cd ~/work/src/vi_grid_map/vi_grid_map/.github
-          ls
-          tree
+      - name: BUILD & TEST
+        run: |
           ./run_ci.sh
