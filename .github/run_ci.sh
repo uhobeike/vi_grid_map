@@ -1,9 +1,9 @@
 #!/bin/bash
-cd ..
+cd .. && cd ..
 
-docker pull ubeike/ros-ci_vi_grid_map
+# docker pull ubeike/ros-ci_vi_grid_map
 
-docker run -it --rm --gpus all \
+docker run -T --rm --gpus all \
     -v $(pwd):/home/catkin_ws/src \
     -v /tmp/.X11-unix:/tmp/.X11-unix:rw \
     -e DISPLAY=$DISPLAY \
