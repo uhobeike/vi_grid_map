@@ -15,4 +15,3 @@ jobs:
       - name: TEST
         run: |
           ls
-      - name: Execute and Test
