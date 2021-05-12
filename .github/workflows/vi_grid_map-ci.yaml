@@ -16,7 +16,7 @@ jobs:
         run: |
           ls
           mkdir -p ~/work/src && cp -rp ~/work/vi_grid_map ~/work/src/vi_grid_map
-          cd ~/work/src/vi_grid_map/vi_grid_map
+          cd ~/work/src/vi_grid_map/vi_grid_map/.github
           ls
           tree
-          ./run.sh
+          ./run_ci.sh
