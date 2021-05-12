@@ -15,7 +15,7 @@ jobs:
       - name: MAKE WS
         run: |
           mkdir -p ~/work/src && cp -rp ~/work/vi_grid_map ~/work/src/vi_grid_map
-          cd ~/work/src/vi_grid_map/vi_grid_map/.github
       - name: BUILD & TEST
         run: |
+          cd ~/work/src/vi_grid_map/vi_grid_map/.github
           ./run_ci.sh
