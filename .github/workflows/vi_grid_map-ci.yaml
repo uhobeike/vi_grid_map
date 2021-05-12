@@ -1,0 +1,18 @@
+name: vi_grid_map-ci
+
+on:
+  push:
+    paths-ignore:
+    - '**.md'
+
+jobs:
+  build&run:
+    runs-on: ubuntu-18.04
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: TEST
+        run: |
+          ls
+      - name: Execute and Test
