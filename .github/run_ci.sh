@@ -1,7 +1,7 @@
 #!/bin/bash
 cd .. && cd ..
 
-# docker pull ubeike/ros-ci_vi_grid_map
+docker pull ubeike/ros-ci_vi_grid_map
 
 docker run \
     -v $(pwd):/home/catkin_ws/src \
