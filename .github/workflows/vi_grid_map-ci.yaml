@@ -15,5 +15,8 @@ jobs:
       - name: TEST
         run: |
           ls
-          mkdir -p ~/work/src && cp -rp ~/work/vi_grid_map ~/work/src/vi_grid_map && cd ~/work/src/vi_grid_map
+          mkdir -p ~/work/src && cp -rp ~/work/vi_grid_map ~/work/src/vi_grid_map
+          cd ~/work/src/vi_grid_map
+          ls
+          tree
           ./run.sh
